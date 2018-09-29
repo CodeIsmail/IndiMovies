@@ -14,6 +14,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubePlayer;
+import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 import com.idealorb.indimovies.BuildConfig;
 import com.idealorb.indimovies.R;
 import com.idealorb.indimovies.adapter.ReviewAdapter;
@@ -24,6 +27,8 @@ import com.idealorb.indimovies.model.ReleaseDate;
 import com.idealorb.indimovies.model.ReleaseDatesJsonUtil;
 import com.idealorb.indimovies.model.Review;
 import com.idealorb.indimovies.model.ReviewJsonUtil;
+import com.idealorb.indimovies.model.Trailer;
+import com.idealorb.indimovies.model.TrailerJsonUtil;
 import com.idealorb.indimovies.network.IMoviesdbApi;
 import com.idealorb.indimovies.network.MoviesRemoteDataSource;
 import com.squareup.picasso.Picasso;
@@ -64,8 +69,6 @@ public class MoviesDetailActivity extends AppCompatActivity {
     TextView movieOverviewTV;
     @BindView(R.id.overview_header_tv)
     TextView overviewHeaderTV;
-    //    @BindView(R.id.rating_header_tv)
-//    TextView ratingHeaderTV;
     @BindView(R.id.movie_runtime_iv)
     ImageView runtimeIV;
     @BindView(R.id.release_date_iv)
@@ -77,6 +80,11 @@ public class MoviesDetailActivity extends AppCompatActivity {
     @BindView(R.id.review_recycler_view)
     RecyclerView reviewRecyclerView;
     ReviewAdapter reviewAdapter;
+    YouTubePlayer.OnInitializedListener onInitializedListener;
+    List<Trailer> trailerList;
+    private String youtubeApi;
+    private YouTubePlayerSupportFragment playerFragment;
+    private YouTubePlayer youTubePlayer;
 
 
     @Override
@@ -91,7 +99,7 @@ public class MoviesDetailActivity extends AppCompatActivity {
         if (ab != null) {
             ab.setDisplayHomeAsUpEnabled(true);
         }
-
+        trailerList = new ArrayList<>();
         List<Review> reviewList = new ArrayList<>();
         reviewAdapter = new ReviewAdapter(reviewList);
         LinearLayoutManager linearLayout = new LinearLayoutManager(this);
@@ -122,6 +130,39 @@ public class MoviesDetailActivity extends AppCompatActivity {
                 .load(getMovieThumbnailUrl(movie.getBackdropPath()))
                 .placeholder(R.color.placeHolder)
                 .into(movieHeaderIV);
+
+        youtubeApi = BuildConfig.YouTubeApiKey;
+        playerFragment = (YouTubePlayerSupportFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.youtube_view);
+
+        onInitializedListener = new YouTubePlayer.OnInitializedListener() {
+            @Override
+            public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer player,
+
+                                                boolean wasRestored) {
+
+                List<String> trailerTitleList = new ArrayList<>();
+                for (int i = 0; i<trailerList.size(); i++){
+                    trailerTitleList.add(trailerList.get(i).getKey());
+                }
+
+                if (!wasRestored) {
+                    youTubePlayer = player;
+
+                    youTubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.DEFAULT);
+
+                    youTubePlayer.loadVideos(trailerTitleList);
+                }
+
+            }
+
+            @Override
+            public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
+
+            }
+        };
+        playerFragment.initialize(youtubeApi, onInitializedListener);
+
     }
 
     private void movieDetail(Movie movie) {
@@ -159,6 +200,24 @@ public class MoviesDetailActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ReviewJsonUtil> call, Throwable t) {
+
+            }
+        });
+        Call<TrailerJsonUtil> trailerRetrofitcall = moviesdbApi
+                .getMovieVideos(movieId, apiKey, "en-US");
+        trailerRetrofitcall.enqueue(new Callback<TrailerJsonUtil>() {
+            @Override
+            public void onResponse(Call<TrailerJsonUtil> call, Response<TrailerJsonUtil> response) {
+                if (response.body() != null) {
+                    TrailerJsonUtil trailerJsonUtil = response.body();
+                    trailerList.addAll(trailerJsonUtil.getTrailers());
+                    Log.d(TAG, "movieDetail: main list size "+ trailerJsonUtil.getTrailers().size());
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TrailerJsonUtil> call, Throwable t) {
 
             }
         });

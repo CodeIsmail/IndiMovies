@@ -4,6 +4,13 @@
     >
 
     <item
+        android:id="@+id/action_favorite"
+        android:orderInCategory="1"
+        android:icon="@drawable/ic_favorite_border"
+        android:title="@string/favorite"
+        app:showAsAction="ifRoom"/>
+
+    <item
         android:id="@+id/action_most_popular"
         app:showAsAction="never"
         android:orderInCategory="1"

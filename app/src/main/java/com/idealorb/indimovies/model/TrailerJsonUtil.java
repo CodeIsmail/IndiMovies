@@ -11,7 +11,7 @@ public class TrailerJsonUtil {
     @SerializedName("id")
     @Expose
     private Integer id;
-    @SerializedName("movieReleaseDatesJSONUtils")
+    @SerializedName("results")
     @Expose
     private List<Trailer> trailers = null;
 
