@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class MoviesJsonUtil {
+public class MovieJsonUtil {
 
     @SerializedName("page")
     @Expose
@@ -18,13 +18,13 @@ public class MoviesJsonUtil {
     private Integer totalPages;
     @SerializedName("results")
     @Expose
-    private List<MoviesModel> movieList = null;
+    private List<Movie> movieList = null;
     private final static long serialVersionUID = 960481827586600146L;
 
     /**
      * No args constructor for use in serialization
      */
-    public MoviesJsonUtil() {
+    public MovieJsonUtil() {
     }
 
     /**
@@ -33,7 +33,7 @@ public class MoviesJsonUtil {
      * @param page
      * @param totalPages
      */
-    public MoviesJsonUtil(Integer page, Integer totalMovies, Integer totalPages, List<MoviesModel> movieList) {
+    public MovieJsonUtil(Integer page, Integer totalMovies, Integer totalPages, List<Movie> movieList) {
         super();
         this.page = page;
         this.totalMovies = totalMovies;
@@ -66,11 +66,11 @@ public class MoviesJsonUtil {
         this.totalPages = totalPages;
     }
 
-    public List<MoviesModel> getMovies() {
+    public List<Movie> getMovies() {
         return movieList;
     }
 
-    public void setMovies(List<MoviesModel> movieList) {
+    public void setMovies(List<Movie> movieList) {
         this.movieList = movieList;
     }
 }

@@ -22,8 +22,8 @@ import com.idealorb.indimovies.BuildConfig;
 import com.idealorb.indimovies.R;
 import com.idealorb.indimovies.adapter.MoviesAdapter;
 import com.idealorb.indimovies.adapter.MoviesAdapter.OnClickMovieListener;
-import com.idealorb.indimovies.model.MoviesJsonUtil;
-import com.idealorb.indimovies.model.MoviesModel;
+import com.idealorb.indimovies.model.Movie;
+import com.idealorb.indimovies.model.MovieJsonUtil;
 import com.idealorb.indimovies.network.IMoviesdbApi;
 import com.idealorb.indimovies.network.MoviesRemoteDataSource;
 
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements OnClickMovieListe
 
         moviesdbApi = MoviesRemoteDataSource.getRetrofitInstance()
                 .create(IMoviesdbApi.class);
-        List<MoviesModel> movieModels = new ArrayList<>();
+        List<Movie> movieModels = new ArrayList<>();
         moviesAdapter = new MoviesAdapter(this, movieModels);
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
@@ -130,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements OnClickMovieListe
     }
 
     private void loadMovies(final int sortOption) {
-        Call<MoviesJsonUtil> retrofitCall;
+        Call<MovieJsonUtil> retrofitCall;
 
         String apiKey = BuildConfig.ApiKey;
         if (sortOption == 0) {
@@ -144,11 +144,11 @@ public class MainActivity extends AppCompatActivity implements OnClickMovieListe
         }
     }
 
-    private void asyncNetworkCall(Call<MoviesJsonUtil> retrofitCall, final int sortOption) {
+    private void asyncNetworkCall(Call<MovieJsonUtil> retrofitCall, final int sortOption) {
 
-        retrofitCall.enqueue(new Callback<MoviesJsonUtil>() {
+        retrofitCall.enqueue(new Callback<MovieJsonUtil>() {
             @Override
-            public void onResponse(@NonNull Call<MoviesJsonUtil> call, @NonNull Response<MoviesJsonUtil> response) {
+            public void onResponse(@NonNull Call<MovieJsonUtil> call, @NonNull Response<MovieJsonUtil> response) {
                 if (response.body() != null) {
                     moviesAdapter.setMoviesList(response.body().getMovies());
                     moviesAdapter.setHeader(sortOption);
@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements OnClickMovieListe
             }
 
             @Override
-            public void onFailure(@NonNull Call<MoviesJsonUtil> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<MovieJsonUtil> call, @NonNull Throwable t) {
                 Log.d(TAG, t.getMessage());
                 showErrorMessage();
             }
@@ -189,11 +189,11 @@ public class MainActivity extends AppCompatActivity implements OnClickMovieListe
     }
 
     @Override
-    public void onClickMovie(MoviesModel moviesModel) {
+    public void onClickMovie(Movie movie) {
 
         Intent movieDetailIntent = new Intent(MainActivity.this, MoviesDetailActivity.class);
         Bundle movieBundle = new Bundle();
-        Parcelable movieParcel = Parcels.wrap(moviesModel);
+        Parcelable movieParcel = Parcels.wrap(movie);
         movieBundle.putParcelable("Movie", movieParcel);
         movieDetailIntent.putExtra(Intent.EXTRA_TEXT, movieBundle);
         startActivity(movieDetailIntent);

@@ -6,7 +6,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.idealorb.indimovies.R;
-import com.idealorb.indimovies.model.MoviesModel;
+import com.idealorb.indimovies.model.Movie;
 
 import java.util.List;
 
@@ -19,10 +19,10 @@ class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickList
     ImageView movieThumbnailIV;
     @BindView(R.id.rate_count_tv)
     TextView ratingCountTV;
-    private final List<MoviesModel> moviesList;
+    private final List<Movie> moviesList;
     private MoviesAdapter.OnClickMovieListener movieListener;
 
-    ItemViewHolder(View itemView, List<MoviesModel> moviesList,
+    ItemViewHolder(View itemView, List<Movie> moviesList,
                    MoviesAdapter.OnClickMovieListener movieListener) {
         super(itemView);
         ButterKnife.bind(this, itemView);
@@ -34,7 +34,7 @@ class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickList
     @Override
     public void onClick(View v) {
         int adapterPosition = getAdapterPosition() - 1;
-        MoviesModel moviesModel = moviesList.get(adapterPosition);
-        movieListener.onClickMovie(moviesModel);
+        Movie movie = moviesList.get(adapterPosition);
+        movieListener.onClickMovie(movie);
     }
 }

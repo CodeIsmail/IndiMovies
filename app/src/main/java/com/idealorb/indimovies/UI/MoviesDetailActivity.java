@@ -5,25 +5,32 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.idealorb.indimovies.BuildConfig;
 import com.idealorb.indimovies.R;
+import com.idealorb.indimovies.adapter.ReviewAdapter;
 import com.idealorb.indimovies.model.Genre;
+import com.idealorb.indimovies.model.Movie;
 import com.idealorb.indimovies.model.MovieDetailJsonUtil;
-import com.idealorb.indimovies.model.MovieReleaseDatesJSONUtil;
-import com.idealorb.indimovies.model.MoviesModel;
 import com.idealorb.indimovies.model.ReleaseDate;
+import com.idealorb.indimovies.model.ReleaseDatesJsonUtil;
+import com.idealorb.indimovies.model.Review;
+import com.idealorb.indimovies.model.ReviewJsonUtil;
 import com.idealorb.indimovies.network.IMoviesdbApi;
 import com.idealorb.indimovies.network.MoviesRemoteDataSource;
 import com.squareup.picasso.Picasso;
 
 import org.parceler.Parcels;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -37,7 +44,7 @@ import retrofit2.Response;
 public class MoviesDetailActivity extends AppCompatActivity {
 
     private static final String TAG = MoviesDetailActivity.class.getSimpleName();
-    private MoviesModel movie;
+    private Movie movie;
 
     @BindView(R.id.movie_title_tv)
     TextView movieTitleTV;
@@ -63,10 +70,13 @@ public class MoviesDetailActivity extends AppCompatActivity {
     ImageView runtimeIV;
     @BindView(R.id.release_date_iv)
     ImageView releaseDateIV;
-    //    @BindView(R.id.press_play_iv)
-//    ImageView pressplayIV;
+    @BindView(R.id.press_play_iv)
+    ImageView pressplayIV;
     @BindView(R.id.child_toolbar)
     Toolbar toolbar;
+    @BindView(R.id.review_recycler_view)
+    RecyclerView reviewRecyclerView;
+    ReviewAdapter reviewAdapter;
 
 
     @Override
@@ -82,6 +92,14 @@ public class MoviesDetailActivity extends AppCompatActivity {
             ab.setDisplayHomeAsUpEnabled(true);
         }
 
+        List<Review> reviewList = new ArrayList<>();
+        reviewAdapter = new ReviewAdapter(reviewList);
+        LinearLayoutManager linearLayout = new LinearLayoutManager(this);
+        linearLayout.setOrientation(LinearLayout.HORIZONTAL);
+        reviewRecyclerView.setLayoutManager(linearLayout);
+        reviewRecyclerView.setHasFixedSize(true);
+        reviewRecyclerView.setAdapter(reviewAdapter);
+        reviewRecyclerView.setNestedScrollingEnabled(false);
         Intent fromMainActivityIntent = getIntent();
 
         if (fromMainActivityIntent != null) {
@@ -97,7 +115,7 @@ public class MoviesDetailActivity extends AppCompatActivity {
         movieReleaseDateTV.setText(extractYear(movie.getReleaseDate()));
         movieOverviewTV.setText(movie.getOverview());
         overviewHeaderTV.setText(R.string.movie_overview);
-        //pressplayIV.setImageResource(R.drawable.ic_press_play);
+        pressplayIV.setImageResource(R.drawable.ic_press_play);
         runtimeIV.setImageResource(R.drawable.ic_timer);
         releaseDateIV.setImageResource(R.drawable.ic_date);
         Picasso.get()
@@ -106,8 +124,8 @@ public class MoviesDetailActivity extends AppCompatActivity {
                 .into(movieHeaderIV);
     }
 
-    private void movieDetail(MoviesModel moviesModel) {
-        int movieId = moviesModel.getId();
+    private void movieDetail(Movie movie) {
+        int movieId = movie.getId();
         String apiKey = BuildConfig.ApiKey;
         IMoviesdbApi moviesdbApi = MoviesRemoteDataSource.getRetrofitInstance()
                 .create(IMoviesdbApi.class);
@@ -123,6 +141,24 @@ public class MoviesDetailActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(@NonNull Call<MovieDetailJsonUtil> call, @NonNull Throwable t) {
+
+            }
+        });
+        Call<ReviewJsonUtil> reviewRetrofitcall = moviesdbApi
+                .getMovieReviews(movieId, apiKey, "en-US", 1);
+        reviewRetrofitcall.enqueue(new Callback<ReviewJsonUtil>() {
+            @Override
+            public void onResponse(@NonNull Call<ReviewJsonUtil> call, @NonNull Response<ReviewJsonUtil> response) {
+                if (response.body() != null) {
+                    ReviewJsonUtil reviewJsonUtil = response.body();
+                    Log.d(TAG, "movieDetail: main list size "+ reviewJsonUtil.getReviews().size());
+                    reviewAdapter.setReviews(reviewJsonUtil.getReviews());
+                    reviewAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ReviewJsonUtil> call, Throwable t) {
 
             }
         });
@@ -144,8 +180,8 @@ public class MoviesDetailActivity extends AppCompatActivity {
 
     private String getMovieCert(MovieDetailJsonUtil movieDetailJsonUtil) {
 
-        List<MovieReleaseDatesJSONUtil> countryCerts = movieDetailJsonUtil.getReleaseDates()
-                .getMovieReleaseDatesJSONUtils();
+        List<ReleaseDatesJsonUtil> countryCerts = movieDetailJsonUtil.getReleaseDates()
+                .getReleaseDatesJsonUtils();
         String movieCert = "";
         ReleaseDate releaseDate;
         for (int i = 0; i < countryCerts.size(); i++) {

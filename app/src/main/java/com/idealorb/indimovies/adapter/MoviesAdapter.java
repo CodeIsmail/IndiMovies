@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.idealorb.indimovies.R;
-import com.idealorb.indimovies.model.MoviesModel;
+import com.idealorb.indimovies.model.Movie;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -18,16 +18,16 @@ public class MoviesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     public static final int TYPE_HEADER = 0;
     public static final int TYPE_ITEM = 1;
-    private final List<MoviesModel> moviesList;
+    private final List<Movie> moviesList;
     private int moviesSortType;
     private OnClickMovieListener onClickMovieListener;
 
     public interface OnClickMovieListener{
-        void onClickMovie(MoviesModel moviesModel);
+        void onClickMovie(Movie movie);
 
     }
 
-    public MoviesAdapter(OnClickMovieListener onClickMovieListener, List<MoviesModel> moviesList) {
+    public MoviesAdapter(OnClickMovieListener onClickMovieListener, List<Movie> moviesList) {
         this.onClickMovieListener = onClickMovieListener;
         this.moviesList = moviesList;
         moviesSortType = R.string.empty_header_label;
@@ -57,7 +57,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         if(holder instanceof HeaderViewHolder){
             ((HeaderViewHolder) holder).headerTextView.setText(moviesSortType);
         }else{
-            MoviesModel movieObject = moviesList.get(position - 1);
+            Movie movieObject = moviesList.get(position - 1);
             ((ItemViewHolder) holder).ratingCountTV.setText(String.format(Locale.ENGLISH,
                     "%.1f", movieObject.getVoteAverage()));
             Picasso.get()
@@ -80,7 +80,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         return (moviesList == null) ? 0 : moviesList.size() + 1;
     }
 
-    public void setMoviesList(List<MoviesModel> moviesList) {
+    public void setMoviesList(List<Movie> moviesList) {
         this.moviesList.clear();
         this.moviesList.addAll(moviesList);
         notifyDataSetChanged();
@@ -94,9 +94,9 @@ public class MoviesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             moviesSortType = R.string.highest_rated_label;
     }
 
-    private String getMovieThumbnailUrl(MoviesModel moviesModel) {
+    private String getMovieThumbnailUrl(Movie movie) {
         String MOVIE_POSTER_BASEURL = "http://image.tmdb.org/t/p/w342/";
-        return MOVIE_POSTER_BASEURL + moviesModel.getPosterPath();
+        return MOVIE_POSTER_BASEURL + movie.getPosterPath();
     }
 
 }

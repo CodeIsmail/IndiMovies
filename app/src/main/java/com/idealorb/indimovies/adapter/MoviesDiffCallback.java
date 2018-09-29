@@ -2,16 +2,16 @@ package com.idealorb.indimovies.adapter;
 
 import android.support.v7.util.DiffUtil;
 
-import com.idealorb.indimovies.model.MoviesModel;
+import com.idealorb.indimovies.model.Movie;
 
 import java.util.List;
 
 public class MoviesDiffCallback extends DiffUtil.Callback {
 
-    private final List<MoviesModel> oldMoviesList;
-    private final List<MoviesModel> newMoviesList;
+    private final List<Movie> oldMoviesList;
+    private final List<Movie> newMoviesList;
 
-    public MoviesDiffCallback(List<MoviesModel> oldMoviesList, List<MoviesModel> newMoviesList) {
+    public MoviesDiffCallback(List<Movie> oldMoviesList, List<Movie> newMoviesList) {
         this.oldMoviesList = oldMoviesList;
         this.newMoviesList = newMoviesList;
     }
@@ -36,8 +36,8 @@ public class MoviesDiffCallback extends DiffUtil.Callback {
 
     @Override
     public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-        final MoviesModel oldMovie = oldMoviesList.get(oldItemPosition);
-        final MoviesModel newMovie = newMoviesList.get(newItemPosition);
+        final Movie oldMovie = oldMoviesList.get(oldItemPosition);
+        final Movie newMovie = newMoviesList.get(newItemPosition);
 
         return oldMovie.getTitle().equals(newMovie.getTitle());
     }

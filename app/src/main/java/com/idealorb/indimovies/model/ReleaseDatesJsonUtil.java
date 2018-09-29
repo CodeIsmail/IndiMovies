@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.List;
 
-public class MovieReleaseDatesJSONUtil implements Serializable {
+public class ReleaseDatesJsonUtil implements Serializable {
 
     @SerializedName("iso_3166_1")
     @Expose
@@ -20,14 +20,14 @@ public class MovieReleaseDatesJSONUtil implements Serializable {
     /**
      * No args constructor for use in serialization
      */
-    public MovieReleaseDatesJSONUtil() {
+    public ReleaseDatesJsonUtil() {
     }
 
     /**
      * @param iso31661
      * @param releaseDates
      */
-    public MovieReleaseDatesJSONUtil(String iso31661, List<ReleaseDate> releaseDates) {
+    public ReleaseDatesJsonUtil(String iso31661, List<ReleaseDate> releaseDates) {
         super();
         this.iso31661 = iso31661;
         this.releaseDates = releaseDates;

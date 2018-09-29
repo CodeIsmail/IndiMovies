@@ -11,7 +11,7 @@ public class ReleaseDates implements Serializable {
 
     @SerializedName("results")
     @Expose
-    private List<MovieReleaseDatesJSONUtil> movieReleaseDatesJSONUtils = null;
+    private List<ReleaseDatesJsonUtil> releaseDatesJsonUtils = null;
     private final static long serialVersionUID = 4944632574702177838L;
 
     /**
@@ -21,19 +21,19 @@ public class ReleaseDates implements Serializable {
     }
 
     /**
-     * @param movieReleaseDatesJSONUtils
+     * @param releaseDatesJsonUtils
      */
-    public ReleaseDates(List<MovieReleaseDatesJSONUtil> movieReleaseDatesJSONUtils) {
+    public ReleaseDates(List<ReleaseDatesJsonUtil> releaseDatesJsonUtils) {
         super();
-        this.movieReleaseDatesJSONUtils = movieReleaseDatesJSONUtils;
+        this.releaseDatesJsonUtils = releaseDatesJsonUtils;
     }
 
-    public List<MovieReleaseDatesJSONUtil> getMovieReleaseDatesJSONUtils() {
-        return movieReleaseDatesJSONUtils;
+    public List<ReleaseDatesJsonUtil> getReleaseDatesJsonUtils() {
+        return releaseDatesJsonUtils;
     }
 
-    public void setMovieReleaseDatesJSONUtils(List<MovieReleaseDatesJSONUtil> movieReleaseDatesJSONUtils) {
-        this.movieReleaseDatesJSONUtils = movieReleaseDatesJSONUtils;
+    public void setReleaseDatesJsonUtils(List<ReleaseDatesJsonUtil> releaseDatesJsonUtils) {
+        this.releaseDatesJsonUtils = releaseDatesJsonUtils;
     }
 
 }

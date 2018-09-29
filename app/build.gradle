@@ -46,12 +46,13 @@ dependencies {
     implementation 'com.jakewharton:butterknife:8.8.1'
     implementation "android.arch.persistence.room:runtime:$arch_version"
     implementation "android.arch.persistence.room:rxjava2:$arch_version"
-    annotationProcessor "android.arch.persistence.room:compiler:$arch_version"
     implementation "android.arch.lifecycle:extensions:$arch_version"
     implementation "android.arch.lifecycle:runtime:$arch_version"
     implementation "android.arch.lifecycle:common-java8:$arch_version"
     implementation "android.arch.lifecycle:reactivestreams:$arch_version"
+    implementation "com.borjabravo:readmoretextview:2.1.0"
     annotationProcessor "android.arch.lifecycle:compiler:$arch_version"
+    annotationProcessor "android.arch.persistence.room:compiler:$arch_version"
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     annotationProcessor 'org.parceler:parceler:1.1.11'
     testImplementation 'junit:junit:4.12'

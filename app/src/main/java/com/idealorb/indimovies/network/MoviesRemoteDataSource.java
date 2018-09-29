@@ -1,6 +1,6 @@
 package com.idealorb.indimovies.network;
 
-import com.idealorb.indimovies.model.MoviesModel;
+import com.idealorb.indimovies.model.Movie;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ public class MoviesRemoteDataSource {
 
     private static final String BASE_URL = "https://api.themoviedb.org/3/";
     private IMoviesdbApi moviesdbApi;
-    private List<MoviesModel> moviesModelList;
+    private List<Movie> movieList;
     private static Retrofit retrofit;
 
     public MoviesRemoteDataSource() {

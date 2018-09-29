@@ -4,7 +4,7 @@ package com.idealorb.indimovies.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class MovieTrailer {
+public class Trailer {
 
     @SerializedName("id")
     @Expose
@@ -35,7 +35,7 @@ public class MovieTrailer {
      * No args constructor for use in serialization
      * 
      */
-    public MovieTrailer() {
+    public Trailer() {
     }
 
     /**
@@ -49,7 +49,7 @@ public class MovieTrailer {
      * @param key
      * @param size
      */
-    public MovieTrailer(String id, String iso6391, String iso31661, String key, String name, String site, Integer size, String type) {
+    public Trailer(String id, String iso6391, String iso31661, String key, String name, String site, Integer size, String type) {
         super();
         this.id = id;
         this.iso6391 = iso6391;

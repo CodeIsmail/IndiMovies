@@ -15,4 +15,6 @@
     <string name="error_message">Failed to load contents</string>
     <string name="movie_overview">SYNOPSIS</string>
     <string name="oval_background">oval_background</string>
+    <string name="reviewer_initials">Reviewer Initials</string>
+    <string name="review_header">Reviews</string>
 </resources>

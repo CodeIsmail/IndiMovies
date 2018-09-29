@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-    <ScrollView
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -59,12 +59,38 @@
                 android:id="@+id/imageView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginStart="8dp"
                 android:contentDescription="@string/oval_background"
+                app:layout_constraintStart_toStartOf="@+id/guideline2"
+                app:layout_constraintTop_toBottomOf="@+id/floatingActionButton"
+                app:srcCompat="@drawable/oval_shape" />
+
+            <ImageView
+                android:id="@+id/press_play_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="8dp"
+                android:contentDescription="@string/press_play"
+                app:layout_constraintBottom_toTopOf="@+id/movie_title_tv"
+                app:layout_constraintEnd_toStartOf="@+id/guideline4"
+                app:layout_constraintStart_toStartOf="@+id/guideline2"
+                app:layout_constraintTop_toTopOf="@+id/header_container"
+                app:srcCompat="@drawable/ic_press_play" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/floatingActionButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:fabSize="normal"
                 app:layout_constraintBottom_toBottomOf="@+id/header_container"
                 app:layout_constraintEnd_toStartOf="@+id/guideline4"
                 app:layout_constraintTop_toBottomOf="@+id/header_container"
-                app:srcCompat="@drawable/oval_shape" />
+                app:srcCompat="@drawable/ic_favorite_border" />
 
             <TextView
                 android:id="@+id/rating_count_label_tv"
@@ -83,15 +109,27 @@
                 android:id="@+id/overview_header_tv"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:textColor="@color/textColorPrimaryDark"
                 app:layout_constraintEnd_toStartOf="@+id/guideline4"
                 app:layout_constraintStart_toStartOf="@+id/guideline2"
                 app:layout_constraintTop_toBottomOf="@+id/imageView"
+                tools:layout_editor_absoluteY="268dp"
                 tools:text="@string/movie_overview" />
 
             <TextView
+                android:id="@+id/review_header_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/review_header"
+                android:textColor="@color/textColorPrimaryDark"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toStartOf="@+id/guideline4"
+                app:layout_constraintStart_toStartOf="@+id/guideline2"
+                app:layout_constraintTop_toBottomOf="@+id/trailer_recycler_view" />
+
+            <com.borjabravo.readmoretextview.ReadMoreTextView
                 android:id="@+id/movie_overview_tv"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -99,6 +137,11 @@
                 android:textColor="@color/textColorPrimaryDark"
                 android:textSize="16sp"
                 android:typeface="serif"
+                app:trimExpandedText="Read More"
+                app:trimCollapsedText="Read Less"
+                app:trimLines="6"
+                app:colorClickableText="@android:color/holo_blue_dark"
+                app:trimMode="trimModeLine"
                 app:layout_constraintEnd_toStartOf="@+id/guideline4"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="@+id/guideline2"
@@ -193,7 +236,44 @@
                 app:layout_constraintStart_toStartOf="@+id/guideline2"
                 app:layout_constraintTop_toBottomOf="@+id/movie_runtime_iv"
                 tools:text="Animation, Action, Adventure" />
+
+            <TextView
+                android:id="@+id/trailer_header_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Trailers"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/guideline2"
+                app:layout_constraintTop_toBottomOf="@+id/movie_overview_tv" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/trailer_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/trailer_header_tv" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/review_recycler_view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:orientation="horizontal"
+                app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/review_header_tv"
+                tools:listitem="@layout/movie_review_list_item" />
+
         </android.support.constraint.ConstraintLayout>
-    </ScrollView>
+    </android.support.v4.widget.NestedScrollView>
 
 </android.support.constraint.ConstraintLayout>

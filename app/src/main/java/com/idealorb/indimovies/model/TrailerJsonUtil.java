@@ -6,31 +6,31 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class MovieTrailersJSONUtil {
+public class TrailerJsonUtil {
 
     @SerializedName("id")
     @Expose
     private Integer id;
     @SerializedName("movieReleaseDatesJSONUtils")
     @Expose
-    private List<MovieTrailer> movieTrailers = null;
+    private List<Trailer> trailers = null;
 
     /**
      * No args constructor for use in serialization
      * 
      */
-    public MovieTrailersJSONUtil() {
+    public TrailerJsonUtil() {
     }
 
     /**
      * 
      * @param id
-     * @param movieTrailers
+     * @param trailers
      */
-    public MovieTrailersJSONUtil(Integer id, List<MovieTrailer> movieTrailers) {
+    public TrailerJsonUtil(Integer id, List<Trailer> trailers) {
         super();
         this.id = id;
-        this.movieTrailers = movieTrailers;
+        this.trailers = trailers;
     }
 
     public Integer getId() {
@@ -41,12 +41,12 @@ public class MovieTrailersJSONUtil {
         this.id = id;
     }
 
-    public List<MovieTrailer> getMovieTrailers() {
-        return movieTrailers;
+    public List<Trailer> getTrailers() {
+        return trailers;
     }
 
-    public void setMovieTrailers(List<MovieTrailer> movieTrailers) {
-        this.movieTrailers = movieTrailers;
+    public void setTrailers(List<Trailer> trailers) {
+        this.trailers = trailers;
     }
 
 }

@@ -8,7 +8,7 @@ import org.parceler.Parcel;
 import java.util.List;
 
 @Parcel
-public class MoviesModel {
+public class Movie {
 
 
     @SerializedName("vote_count")
@@ -58,7 +58,7 @@ public class MoviesModel {
     /**
      * No args constructor for use in serialization
      */
-    public MoviesModel() {
+    public Movie() {
     }
 
     /**
@@ -77,7 +77,7 @@ public class MoviesModel {
      * @param video
      * @param popularity
      */
-    public MoviesModel(Integer voteCount, Integer id, Boolean video, Float voteAverage, String title, Float popularity, String posterPath, String originalLanguage, String originalTitle, List<Integer> genreIds, String backdropPath, Boolean adult, String overview, String releaseDate) {
+    public Movie(Integer voteCount, Integer id, Boolean video, Float voteAverage, String title, Float popularity, String posterPath, String originalLanguage, String originalTitle, List<Integer> genreIds, String backdropPath, Boolean adult, String overview, String releaseDate) {
         super();
         this.voteCount = voteCount;
         this.id = id;
