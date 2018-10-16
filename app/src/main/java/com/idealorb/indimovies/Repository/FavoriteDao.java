@@ -6,19 +6,21 @@ import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 
+import com.idealorb.indimovies.model.Movie;
+
 import java.util.List;
 
 @Dao
 public interface FavoriteDao {
     @Insert
-    void insert(FavoriteMovie movie);
+    public void insert(Movie movie);
 
     @Query("DELETE FROM favorite_movie")
-    void deleteAll();
+    public void deleteAll();
 
     @Delete
-    void delete(FavoriteMovie movie);
+    public void delete(Movie movie);
 
-    @Query("SELECT * from favorite_movie ORDER BY movieId ASC")
-    LiveData<List<FavoriteMovie>> getAllMovies();
+    @Query("SELECT * from favorite_movie ORDER BY id ASC")
+    public LiveData<List<Movie>> getAllMovies();
 }

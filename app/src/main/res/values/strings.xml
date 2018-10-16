@@ -18,4 +18,6 @@
     <string name="reviewer_initials">Reviewer Initials</string>
     <string name="review_header">Reviews</string>
     <string name="favorite">Favorite</string>
+    <string name="favorite_label">Favorite</string>
+    <string name="nofavmovies">No favorite movies available</string>
 </resources>

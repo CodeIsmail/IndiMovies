@@ -65,20 +65,6 @@
                 app:layout_constraintTop_toBottomOf="@+id/floatingActionButton"
                 app:srcCompat="@drawable/oval_shape" />
 
-            <ImageView
-                android:id="@+id/press_play_iv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="32dp"
-                android:layout_marginEnd="8dp"
-                android:contentDescription="@string/press_play"
-                app:layout_constraintBottom_toTopOf="@+id/movie_title_tv"
-                app:layout_constraintEnd_toStartOf="@+id/guideline4"
-                app:layout_constraintStart_toStartOf="@+id/guideline2"
-                app:layout_constraintTop_toTopOf="@+id/header_container"
-                app:srcCompat="@drawable/ic_press_play" />
-
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/floatingActionButton"
                 android:layout_width="wrap_content"
@@ -127,25 +113,25 @@
                 android:textSize="20sp"
                 app:layout_constraintEnd_toStartOf="@+id/guideline4"
                 app:layout_constraintStart_toStartOf="@+id/guideline2"
-                app:layout_constraintTop_toBottomOf="@id/youtube_view" />
+                app:layout_constraintTop_toBottomOf="@+id/youtube_view" />
 
             <com.borjabravo.readmoretextview.ReadMoreTextView
                 android:id="@+id/movie_overview_tv"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:textColor="@color/textColorPrimaryDark"
                 android:textSize="16sp"
                 android:typeface="serif"
-                app:trimExpandedText="Read More"
-                app:trimCollapsedText="Read Less"
-                app:trimLines="6"
-                app:colorClickableText="@android:color/holo_blue_dark"
-                app:trimMode="trimModeLine"
+                app:colorClickableText="@color/readMore"
                 app:layout_constraintEnd_toStartOf="@+id/guideline4"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="@+id/guideline2"
                 app:layout_constraintTop_toBottomOf="@+id/overview_header_tv"
+                app:trimCollapsedText="Read Less"
+                app:trimExpandedText="Read More"
+                app:trimLines="6"
+                app:trimMode="trimModeLine"
                 tools:text="Elastigirl springs into action to save the day, while Mr, Incredible faces his greatest challenge yet taking care of the problems of his three children" />
 
             <android.support.constraint.Guideline
@@ -166,7 +152,7 @@
                 android:id="@+id/movie_title_tv"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="144dp"
+                android:layout_marginTop="100dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:textColor="@color/textColorPrimary"
                 android:textSize="24sp"
@@ -231,7 +217,9 @@
                 android:id="@+id/genres_tv"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
                 android:textColor="@color/textColorPrimary"
+                app:layout_constraintBottom_toTopOf="@+id/floatingActionButton"
                 app:layout_constraintEnd_toStartOf="@+id/guideline4"
                 app:layout_constraintStart_toStartOf="@+id/guideline2"
                 app:layout_constraintTop_toBottomOf="@+id/movie_runtime_iv"
@@ -243,20 +231,22 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="Trailers"
+                android:textColor="@color/textColorPrimaryDark"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/guideline2"
                 app:layout_constraintTop_toBottomOf="@+id/movie_overview_tv" />
 
+
             <fragment
                 android:id="@+id/youtube_view"
+                android:name="com.google.android.youtube.player.YouTubePlayerSupportFragment"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:name="com.google.android.youtube.player.YouTubePlayerSupportFragment"
                 android:orientation="horizontal"
-                app:layoutManager="android.support.v7.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/trailer_header_tv" />
@@ -265,17 +255,54 @@
                 android:id="@+id/review_recycler_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
                 android:orientation="horizontal"
                 app:layoutManager="android.support.v7.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/review_header_tv"
-                tools:listitem="@layout/movie_review_list_item" />
+                app:layout_constraintVertical_bias="1.0"
+                tools:listitem="@layout/movie_review_list_item">
+
+            </android.support.v7.widget.RecyclerView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/no_reviews_card"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/review_header_tv">
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/no_reviews_tv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="No Reviews Yet"
+                        android:textAlignment="center"
+                        android:textColor="@color/textColorPrimaryDark"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </android.support.constraint.ConstraintLayout>
+
+            </android.support.v7.widget.CardView>
 
         </android.support.constraint.ConstraintLayout>
     </android.support.v4.widget.NestedScrollView>

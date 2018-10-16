@@ -90,8 +90,10 @@ public class MoviesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public void setHeader(int sortType) {
         if (sortType == 0)
             moviesSortType = R.string.most_popular_label;
-        else
+        else if (sortType == 1)
             moviesSortType = R.string.highest_rated_label;
+        else if (sortType == 2)
+            moviesSortType = R.string.favorite_label;
     }
 
     private String getMovieThumbnailUrl(Movie movie) {

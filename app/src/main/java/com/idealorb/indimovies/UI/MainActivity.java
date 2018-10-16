@@ -1,31 +1,26 @@
 package com.idealorb.indimovies.UI;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.idealorb.indimovies.BuildConfig;
 import com.idealorb.indimovies.R;
 import com.idealorb.indimovies.adapter.MoviesAdapter;
 import com.idealorb.indimovies.adapter.MoviesAdapter.OnClickMovieListener;
 import com.idealorb.indimovies.model.Movie;
-import com.idealorb.indimovies.model.MovieJsonUtil;
-import com.idealorb.indimovies.network.IMoviesdbApi;
-import com.idealorb.indimovies.network.MoviesRemoteDataSource;
 
 import org.parceler.Parcels;
 
@@ -34,9 +29,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 
 public class MainActivity extends AppCompatActivity implements OnClickMovieListener {
@@ -53,8 +45,9 @@ public class MainActivity extends AppCompatActivity implements OnClickMovieListe
     @BindView(R.id.main_toolbar)
     Toolbar mainToolbar;
     private MoviesAdapter moviesAdapter;
-    private int moviesSort = 0; //Most Popular movie (0) | Top Rated (1)
-    private IMoviesdbApi moviesdbApi;
+    private int moviesSort = 0; //Most Popular movie (0) | Top Rated (1) | Favorite (2)
+    private MainViewModel mainViewModel;
+    private MenuItem menuItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,8 +60,7 @@ public class MainActivity extends AppCompatActivity implements OnClickMovieListe
             findViewById(R.id.gradientShadow).setVisibility(View.GONE);
         }
 
-        moviesdbApi = MoviesRemoteDataSource.getRetrofitInstance()
-                .create(IMoviesdbApi.class);
+
         List<Movie> movieModels = new ArrayList<>();
         moviesAdapter = new MoviesAdapter(this, movieModels);
 
@@ -76,10 +68,13 @@ public class MainActivity extends AppCompatActivity implements OnClickMovieListe
         gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
-                switch(moviesAdapter.getItemViewType(position)){
-                    case MoviesAdapter.TYPE_HEADER: return 2;
-                    case MoviesAdapter.TYPE_ITEM: return 1;
-                    default: return -1;
+                switch (moviesAdapter.getItemViewType(position)) {
+                    case MoviesAdapter.TYPE_HEADER:
+                        return 2;
+                    case MoviesAdapter.TYPE_ITEM:
+                        return 1;
+                    default:
+                        return -1;
                 }
             }
         });
@@ -106,15 +101,25 @@ public class MainActivity extends AppCompatActivity implements OnClickMovieListe
         recyclerView.setAdapter(moviesAdapter);
 
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                loadMovies(moviesSort);
+        swipeRefreshLayout.setOnRefreshListener(this::loadMovies);
+        mainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+
+        loadMovies();
+
+    }
+
+    private void loadMovies() {
+        mainViewModel.getMovies(moviesSort).observe(this, movies -> {
+            if (movies != null && movies.size() != 0) {
+                showMovieDataView();
+                moviesAdapter.setMoviesList(movies);
+                moviesAdapter.setHeader(moviesSort);
+                recyclerView.smoothScrollToPosition(0);
+                swipeRefreshLayout.setRefreshing(false);
+            }else{
+                showErrorMessage();
             }
         });
-
-        loadMovies(moviesSort);
-
     }
 
     private void showMovieDataView() {
@@ -126,48 +131,21 @@ public class MainActivity extends AppCompatActivity implements OnClickMovieListe
     private void showErrorMessage() {
         progressBar.setVisibility(View.INVISIBLE);
         recyclerView.setVisibility(View.INVISIBLE);
-        errorMessageTv.setVisibility(View.VISIBLE);
-    }
-
-    private void loadMovies(final int sortOption) {
-        Call<MovieJsonUtil> retrofitCall;
-
-        String apiKey = BuildConfig.ApiKey;
-        if (sortOption == 0) {
-            retrofitCall = moviesdbApi
-                    .getPopularMovies(apiKey, "en-US", 1);
-            asyncNetworkCall(retrofitCall, sortOption);
-        } else {
-            retrofitCall = moviesdbApi
-                    .getTopRatedMovies(apiKey, "en-US", 1);
-            asyncNetworkCall(retrofitCall, sortOption);
+        if (moviesSort == 2){
+            errorMessageTv.setText(R.string.nofavmovies);
+        }else{
+            errorMessageTv.setText(R.string.error_message);
         }
+        errorMessageTv.setVisibility(View.VISIBLE);
+
     }
 
-    private void asyncNetworkCall(Call<MovieJsonUtil> retrofitCall, final int sortOption) {
 
-        retrofitCall.enqueue(new Callback<MovieJsonUtil>() {
-            @Override
-            public void onResponse(@NonNull Call<MovieJsonUtil> call, @NonNull Response<MovieJsonUtil> response) {
-                if (response.body() != null) {
-                    moviesAdapter.setMoviesList(response.body().getMovies());
-                    moviesAdapter.setHeader(sortOption);
-                    recyclerView.smoothScrollToPosition(0);
-                    swipeRefreshLayout.setRefreshing(false);
-                }
-                showMovieDataView();
-            }
 
-            @Override
-            public void onFailure(@NonNull Call<MovieJsonUtil> call, @NonNull Throwable t) {
-                Log.d(TAG, t.getMessage());
-                showErrorMessage();
-            }
-        });
-    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
+        menuItem = menu.findItem(R.id.action_favorite);
         return super.onCreateOptionsMenu(menu);
 
     }
@@ -176,14 +154,20 @@ public class MainActivity extends AppCompatActivity implements OnClickMovieListe
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
 
-        if(itemId == R.id.action_most_popular){
+        if (itemId == R.id.action_most_popular) {
             progressBar.setVisibility(View.VISIBLE);
+            menuItem.setIcon(R.drawable.ic_favorite_border);
             moviesSort = 0;
-            loadMovies(moviesSort);
-        }else if(itemId == R.id.action_highest_rated){
+            loadMovies();
+        } else if (itemId == R.id.action_highest_rated) {
             progressBar.setVisibility(View.VISIBLE);
+            menuItem.setIcon(R.drawable.ic_favorite_border);
             moviesSort = 1;
-            loadMovies(moviesSort);
+            loadMovies();
+        }else if(itemId ==  R.id.action_favorite){
+            moviesSort = 2;
+            item.setIcon(R.drawable.ic_favorite);
+            loadMovies();
         }
         return super.onOptionsItemSelected(item);
     }

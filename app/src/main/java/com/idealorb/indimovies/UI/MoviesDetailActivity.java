@@ -1,15 +1,17 @@
 package com.idealorb.indimovies.UI;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -26,11 +28,7 @@ import com.idealorb.indimovies.model.MovieDetailJsonUtil;
 import com.idealorb.indimovies.model.ReleaseDate;
 import com.idealorb.indimovies.model.ReleaseDatesJsonUtil;
 import com.idealorb.indimovies.model.Review;
-import com.idealorb.indimovies.model.ReviewJsonUtil;
 import com.idealorb.indimovies.model.Trailer;
-import com.idealorb.indimovies.model.TrailerJsonUtil;
-import com.idealorb.indimovies.network.IMoviesdbApi;
-import com.idealorb.indimovies.network.MoviesRemoteDataSource;
 import com.squareup.picasso.Picasso;
 
 import org.parceler.Parcels;
@@ -42,9 +40,6 @@ import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MoviesDetailActivity extends AppCompatActivity {
 
@@ -73,18 +68,19 @@ public class MoviesDetailActivity extends AppCompatActivity {
     ImageView runtimeIV;
     @BindView(R.id.release_date_iv)
     ImageView releaseDateIV;
-    @BindView(R.id.press_play_iv)
-    ImageView pressplayIV;
     @BindView(R.id.child_toolbar)
     Toolbar toolbar;
     @BindView(R.id.review_recycler_view)
     RecyclerView reviewRecyclerView;
+    @BindView(R.id.no_reviews_card)
+    CardView noreviewsCard;
     ReviewAdapter reviewAdapter;
     YouTubePlayer.OnInitializedListener onInitializedListener;
     List<Trailer> trailerList;
     private String youtubeApi;
     private YouTubePlayerSupportFragment playerFragment;
     private YouTubePlayer youTubePlayer;
+    private DetailViewModel detailViewModel;
 
 
     @Override
@@ -109,12 +105,13 @@ public class MoviesDetailActivity extends AppCompatActivity {
         reviewRecyclerView.setAdapter(reviewAdapter);
         reviewRecyclerView.setNestedScrollingEnabled(false);
         Intent fromMainActivityIntent = getIntent();
+        detailViewModel = ViewModelProviders.of(this).get(DetailViewModel.class);
 
         if (fromMainActivityIntent != null) {
             Bundle movieBundle = fromMainActivityIntent.getBundleExtra(Intent.EXTRA_TEXT);
 
             movie = Parcels.unwrap(movieBundle.getParcelable("Movie"));
-            movieDetail(Objects.requireNonNull(movie));
+            loadMovieDetail(Objects.requireNonNull(movie));
         }
         movieTitleTV.setText(movie.getTitle());
         movieRatingTV.setText(String.format(Locale.getDefault(),
@@ -123,7 +120,6 @@ public class MoviesDetailActivity extends AppCompatActivity {
         movieReleaseDateTV.setText(extractYear(movie.getReleaseDate()));
         movieOverviewTV.setText(movie.getOverview());
         overviewHeaderTV.setText(R.string.movie_overview);
-        pressplayIV.setImageResource(R.drawable.ic_press_play);
         runtimeIV.setImageResource(R.drawable.ic_timer);
         releaseDateIV.setImageResource(R.drawable.ic_date);
         Picasso.get()
@@ -148,9 +144,7 @@ public class MoviesDetailActivity extends AppCompatActivity {
 
                 if (!wasRestored) {
                     youTubePlayer = player;
-
                     youTubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.DEFAULT);
-
                     youTubePlayer.loadVideos(trailerTitleList);
                 }
 
@@ -162,67 +156,35 @@ public class MoviesDetailActivity extends AppCompatActivity {
             }
         };
         playerFragment.initialize(youtubeApi, onInitializedListener);
-
     }
 
-    private void movieDetail(Movie movie) {
+    private void loadMovieDetail(Movie movie) {
         int movieId = movie.getId();
-        String apiKey = BuildConfig.ApiKey;
-        IMoviesdbApi moviesdbApi = MoviesRemoteDataSource.getRetrofitInstance()
-                .create(IMoviesdbApi.class);
-        Call<MovieDetailJsonUtil> retrofitcall = moviesdbApi
-                .getMovieDetail(movieId, apiKey, "en-US", "release_dates");
-        retrofitcall.enqueue(new Callback<MovieDetailJsonUtil>() {
-            @Override
-            public void onResponse(@NonNull Call<MovieDetailJsonUtil> call, @NonNull Response<MovieDetailJsonUtil> response) {
-                if (response.body() != null) {
-                    bindRemoteDataToViews(response.body());
-                }
+        detailViewModel.getMovieDetails(movieId).observe(this, this::bindRemoteDataToViews);
+        detailViewModel.getMovieReviews(movieId).observe(this, reviews -> {
+            if (reviews != null && reviews.size() != 0) {
+                showReviews();
+                reviewAdapter.setReviews(reviews);
+                reviewAdapter.notifyDataSetChanged();
+            }else{
+                showNoReviewsMessage();
             }
 
-            @Override
-            public void onFailure(@NonNull Call<MovieDetailJsonUtil> call, @NonNull Throwable t) {
-
-            }
         });
-        Call<ReviewJsonUtil> reviewRetrofitcall = moviesdbApi
-                .getMovieReviews(movieId, apiKey, "en-US", 1);
-        reviewRetrofitcall.enqueue(new Callback<ReviewJsonUtil>() {
-            @Override
-            public void onResponse(@NonNull Call<ReviewJsonUtil> call, @NonNull Response<ReviewJsonUtil> response) {
-                if (response.body() != null) {
-                    ReviewJsonUtil reviewJsonUtil = response.body();
-                    Log.d(TAG, "movieDetail: main list size "+ reviewJsonUtil.getReviews().size());
-                    reviewAdapter.setReviews(reviewJsonUtil.getReviews());
-                    reviewAdapter.notifyDataSetChanged();
-                }
-            }
 
-            @Override
-            public void onFailure(Call<ReviewJsonUtil> call, Throwable t) {
+        detailViewModel.getMovieTrailers(movieId).observe(this, trailers -> trailerList.addAll(trailers));
 
-            }
-        });
-        Call<TrailerJsonUtil> trailerRetrofitcall = moviesdbApi
-                .getMovieVideos(movieId, apiKey, "en-US");
-        trailerRetrofitcall.enqueue(new Callback<TrailerJsonUtil>() {
-            @Override
-            public void onResponse(Call<TrailerJsonUtil> call, Response<TrailerJsonUtil> response) {
-                if (response.body() != null) {
-                    TrailerJsonUtil trailerJsonUtil = response.body();
-                    trailerList.addAll(trailerJsonUtil.getTrailers());
-                    Log.d(TAG, "movieDetail: main list size "+ trailerJsonUtil.getTrailers().size());
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<TrailerJsonUtil> call, Throwable t) {
-
-            }
-        });
     }
 
+    private void showNoReviewsMessage(){
+        reviewRecyclerView.setVisibility(View.INVISIBLE);
+        noreviewsCard.setVisibility(View.VISIBLE);
+    }
+
+    private void showReviews(){
+        noreviewsCard.setVisibility(View.INVISIBLE);
+        reviewRecyclerView.setVisibility(View.VISIBLE);
+    }
     private void bindRemoteDataToViews(MovieDetailJsonUtil movieDetailUtil) {
 
         movieRuntimeTV.setText(
