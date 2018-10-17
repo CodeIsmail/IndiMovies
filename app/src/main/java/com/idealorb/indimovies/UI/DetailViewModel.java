@@ -33,9 +33,9 @@ public class DetailViewModel extends AndroidViewModel {
     public LiveData<List<Trailer>> getMovieTrailers(int movieId){
         return mRepository.loadRemoteMovieTrailers(movieId);
     }
-    public void insert(Movie movie) { mRepository.insert(movie); }
+    public void saveFavorite(Movie movie) { mRepository.saveFavoriteMovie(movie); }
 
-    public void delete(Movie movie){
-        mRepository.delete(movie);
+    public void deleteFavorite(Movie movie){
+        mRepository.removeFavoriteMovie(movie);
     }
 }

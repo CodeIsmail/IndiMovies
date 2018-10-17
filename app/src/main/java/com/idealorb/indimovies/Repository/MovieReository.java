@@ -3,7 +3,6 @@ package com.idealorb.indimovies.Repository;
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
-import android.os.AsyncTask;
 import android.util.Log;
 
 import com.idealorb.indimovies.BuildConfig;
@@ -19,10 +18,9 @@ import com.idealorb.indimovies.network.MoviesRemoteDataSource;
 
 import java.util.List;
 
-import io.reactivex.Observable;
-import io.reactivex.Observer;
+import io.reactivex.Completable;
+import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class MovieReository {
@@ -54,32 +52,29 @@ public class MovieReository {
     }
 
 
-    public void delete(Movie movie) {
-        favoriteDao.delete(movie);
+    public void removeFavoriteMovie(Movie movie) {
+        Completable.fromAction(() -> favoriteDao.delete(movie))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(() -> Log.d(TAG, "Movie removed from favorites"),
+                        throwable -> Log.e(TAG, throwable.getMessage())
+                );
     }
 
-    public void insert(Movie movie) {
-        new insertAsyncTask(favoriteDao).execute(movie);
-    }
-
-    private static class insertAsyncTask extends AsyncTask<Movie, Void, Void> {
-
-        private FavoriteDao mAsyncTaskDao;
-
-        insertAsyncTask(FavoriteDao dao) {
-            mAsyncTaskDao = dao;
-        }
-
-        @Override
-        protected Void doInBackground(final Movie... params) {
-            mAsyncTaskDao.insert(params[0]);
-            return null;
-        }
+    public void saveFavoriteMovie(Movie movie) {
+        Movie favorite = new Movie(movie.getId(), movie.getTitle(),
+                movie.getVoteAverage(), movie.getPosterPath(), movie.getOverview(),
+                movie.getReleaseDate(), true);
+        Completable.fromAction(() -> favoriteDao.insert(favorite))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(() -> Log.d(TAG, "New favorite movie saved!"),
+                        throwable -> Log.e(TAG, throwable.getMessage()));
     }
 
 
     public LiveData<List<Movie>> loadRemoteMovies(int sortOption) {
-        Observable<MovieJsonUtil> retrofitCall;
+        Single<MovieJsonUtil> retrofitCall;
 
 
         if (sortOption == 0) {
@@ -94,128 +89,56 @@ public class MovieReository {
         return remoteMovies;
     }
 
-    public LiveData<MovieDetailJsonUtil> loadRemoteMovieDetails(int movieId){
-        Observable<MovieDetailJsonUtil> movieDetailObservable =
+    public LiveData<MovieDetailJsonUtil> loadRemoteMovieDetails(int movieId) {
+        Single<MovieDetailJsonUtil> movieDetailObservable =
                 moviesdbApi
                         .getMovieDetail(movieId, API_KEY, "en-US", "release_dates");
 
         movieDetailObservable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<MovieDetailJsonUtil>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onNext(MovieDetailJsonUtil movieDetailJsonUtil) {
-                        remoteMovieDetails.setValue(movieDetailJsonUtil);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
-        return  remoteMovieDetails;
+                .subscribe(movieDetailJsonUtil -> remoteMovieDetails.setValue(movieDetailJsonUtil),
+                        throwable -> Log.e(TAG, throwable.getMessage())
+                );
+        return remoteMovieDetails;
     }
 
-    public LiveData<List<Review>> loadRemoteMovieReviews(int movieId){
-        Observable<ReviewJsonUtil> movieDetailObservable =
+    public LiveData<List<Review>> loadRemoteMovieReviews(int movieId) {
+        Single<ReviewJsonUtil> movieDetailObservable =
                 moviesdbApi
                         .getMovieReviews(movieId, API_KEY, "en-US", 1);
 
         movieDetailObservable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<ReviewJsonUtil>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onNext(ReviewJsonUtil movieDetailJsonUtil) {
-                        remoteMovieReviews.setValue(movieDetailJsonUtil.getReviews());
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
-        return  remoteMovieReviews;
+                .subscribe(reviewJsonUtil -> remoteMovieReviews.setValue(reviewJsonUtil.getReviews()),
+                        throwable -> Log.e(TAG, throwable.getMessage())
+                );
+        return remoteMovieReviews;
     }
 
-    public LiveData<List<Trailer>> loadRemoteMovieTrailers(int movieId){
-        Observable<TrailerJsonUtil> movieDetailObservable =
+    public LiveData<List<Trailer>> loadRemoteMovieTrailers(int movieId) {
+        Single<TrailerJsonUtil> movieDetailObservable =
                 moviesdbApi
                         .getMovieVideos(movieId, API_KEY, "en-US");
 
         movieDetailObservable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<TrailerJsonUtil>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onNext(TrailerJsonUtil trailerJsonUtil) {
-                        remoteMovieTrailers.setValue(trailerJsonUtil.getTrailers());
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
-        return  remoteMovieTrailers;
+                .subscribe(trailerJsonUtil -> remoteMovieTrailers.setValue(trailerJsonUtil.getTrailers()),
+                        throwable -> Log.e(TAG, throwable.getMessage())
+                );
+        return remoteMovieTrailers;
     }
-    private void asyncNetworkCall(Observable<MovieJsonUtil> retrofitCall) {
+
+    private void asyncNetworkCall(Single<MovieJsonUtil> retrofitCall) {
 
         retrofitCall.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(moviesObserver());
+                .subscribe((movieJsonUtil, throwable) -> {
+                    if (movieJsonUtil != null)
+                        remoteMovies.setValue(movieJsonUtil.getMovies());
+
+                    if (throwable != null)
+                        Log.e(TAG, throwable.getMessage());
+                });
     }
-
-    private Observer<MovieJsonUtil> moviesObserver(){
-        return new Observer<MovieJsonUtil>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-
-            }
-
-            @Override
-            public void onNext(MovieJsonUtil movieJsonUtil) {
-                remoteMovies.setValue(movieJsonUtil.getMovies());
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Log.d(TAG, e.getMessage());
-            }
-
-            @Override
-            public void onComplete() {
-                Log.d(TAG, "Data successfully loaded!");
-            }
-        };
-    }
-
 
 }

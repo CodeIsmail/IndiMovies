@@ -3,6 +3,7 @@ package com.idealorb.indimovies.UI;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -74,6 +75,8 @@ public class MoviesDetailActivity extends AppCompatActivity {
     RecyclerView reviewRecyclerView;
     @BindView(R.id.no_reviews_card)
     CardView noreviewsCard;
+    @BindView(R.id.save_fav_bttn)
+    FloatingActionButton saveFavorite;
     ReviewAdapter reviewAdapter;
     YouTubePlayer.OnInitializedListener onInitializedListener;
     List<Trailer> trailerList;
@@ -81,6 +84,7 @@ public class MoviesDetailActivity extends AppCompatActivity {
     private YouTubePlayerSupportFragment playerFragment;
     private YouTubePlayer youTubePlayer;
     private DetailViewModel detailViewModel;
+    private boolean isClicked =  false;
 
 
     @Override
@@ -156,10 +160,34 @@ public class MoviesDetailActivity extends AppCompatActivity {
             }
         };
         playerFragment.initialize(youtubeApi, onInitializedListener);
+
+        saveFavorite.setOnClickListener(v -> {
+            if (!isClicked){
+                saveFavorite.setImageResource(R.drawable.ic_favorite);
+                saveFavoriteMovie();
+                isClicked = true;
+            }else {
+                saveFavorite.setImageResource(R.drawable.ic_favorite_border);
+                removeFavoriteMovie();
+                isClicked = false;
+            }
+
+        });
+    }
+
+    private void removeFavoriteMovie() {
+        detailViewModel.deleteFavorite(movie);
     }
 
     private void loadMovieDetail(Movie movie) {
         int movieId = movie.getId();
+        if (movie.isFavorite()){
+            saveFavorite.setImageResource(R.drawable.ic_favorite);
+            isClicked = true;
+        }else {
+            saveFavorite.setImageResource(R.drawable.ic_favorite_border);
+            isClicked = false;
+        }
         detailViewModel.getMovieDetails(movieId).observe(this, this::bindRemoteDataToViews);
         detailViewModel.getMovieReviews(movieId).observe(this, reviews -> {
             if (reviews != null && reviews.size() != 0) {
@@ -174,6 +202,10 @@ public class MoviesDetailActivity extends AppCompatActivity {
 
         detailViewModel.getMovieTrailers(movieId).observe(this, trailers -> trailerList.addAll(trailers));
 
+    }
+
+    private void saveFavoriteMovie(){
+        detailViewModel.saveFavorite(movie);
     }
 
     private void showNoReviewsMessage(){

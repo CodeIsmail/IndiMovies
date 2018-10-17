@@ -1,7 +1,9 @@
 package com.idealorb.indimovies.UI;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -34,6 +36,7 @@ import butterknife.ButterKnife;
 public class MainActivity extends AppCompatActivity implements OnClickMovieListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String SHARED_PREFS_FILE = "shared_pref";
     @BindView(R.id.tv_error_message)
     TextView errorMessageTv;
     @BindView(R.id.swiperefresh)
@@ -60,6 +63,9 @@ public class MainActivity extends AppCompatActivity implements OnClickMovieListe
             findViewById(R.id.gradientShadow).setVisibility(View.GONE);
         }
 
+        if (savedInstanceState != null){
+            moviesSort = savedInstanceState.getInt(Intent.EXTRA_TEXT);
+        }
 
         List<Movie> movieModels = new ArrayList<>();
         moviesAdapter = new MoviesAdapter(this, movieModels);
@@ -111,10 +117,11 @@ public class MainActivity extends AppCompatActivity implements OnClickMovieListe
     private void loadMovies() {
         mainViewModel.getMovies(moviesSort).observe(this, movies -> {
             if (movies != null && movies.size() != 0) {
-                showMovieDataView();
                 moviesAdapter.setMoviesList(movies);
                 moviesAdapter.setHeader(moviesSort);
+                moviesAdapter.notifyDataSetChanged();
                 recyclerView.smoothScrollToPosition(0);
+                showMovieDataView();
                 swipeRefreshLayout.setRefreshing(false);
             }else{
                 showErrorMessage();
@@ -140,12 +147,44 @@ public class MainActivity extends AppCompatActivity implements OnClickMovieListe
 
     }
 
+    private void saveMovieSort(){
+        SharedPreferences prefs = getSharedPreferences(SHARED_PREFS_FILE, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt(Intent.EXTRA_TEXT, moviesSort);
+        editor.apply();
+    }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        saveMovieSort();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        SharedPreferences prefs = getSharedPreferences(SHARED_PREFS_FILE, Context.MODE_PRIVATE);
+        moviesSort = prefs.getInt(Intent.EXTRA_TEXT, 0);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(Intent.EXTRA_TEXT, moviesSort);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        moviesSort = savedInstanceState.getInt(Intent.EXTRA_TEXT);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
         menuItem = menu.findItem(R.id.action_favorite);
+        if (moviesSort==2)
+            menuItem.setIcon(R.drawable.ic_favorite);
         return super.onCreateOptionsMenu(menu);
 
     }
