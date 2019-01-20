@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/main_toolbar"
         android:layout_width="0dp"
         android:layout_height="?attr/actionBarSize"
@@ -18,63 +18,28 @@
         app:title="@string/app_name"
         app:titleTextColor="@color/textColorPrimary" />
 
-    <View
-        android:id="@+id/gradientShadow"
-        android:layout_width="match_parent"
-        android:layout_height="4dp"
-        android:background="@drawable/toolbar_shadow"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/main_toolbar" />
-
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swiperefresh"
+    <fragment
+        android:id="@+id/nav_host_fragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        app:defaultNavHost="true"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_nav"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/main_toolbar"
+        app:navGraph="@navigation/nav_graph" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_nav"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:itemBackground="@android:color/white"
+        app:itemIconTint="@color/colorPrimary"
+        app:itemTextColor="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gradientShadow">
+        app:menu="@menu/app_top_menu" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:layoutManager="android.support.v7.widget.GridLayoutManager"
-            tools:spanCount="2"
-            tools:listitem="@layout/movies_list_item" />
-    </android.support.v4.widget.SwipeRefreshLayout>
-
-    <TextView
-        android:id="@+id/tv_error_message"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:padding="16dp"
-        android:text="@string/error_message"
-        android:textSize="20sp"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gradientShadow" />
-
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/swiperefresh"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gradientShadow" />
-
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

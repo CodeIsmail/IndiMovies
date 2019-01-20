@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/tvShowDiscoverFragment">
+
+    <fragment
+        android:id="@+id/tvShowDiscoverFragment"
+        android:name="com.idealorb.indimovies.UI.TvShowDiscoverFragment"
+        android:label="tv_show_discover_fragment"
+        tools:layout="@layout/tv_show_discover_fragment" >
+        <action
+            android:id="@+id/action_tvShowDiscoverFragment_to_airingFragment"
+            app:destination="@id/airingFragment" />
+        <action
+            android:id="@+id/action_tvShowDiscoverFragment_to_showTrackingFragment"
+            app:destination="@id/showTrackingFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/airingFragment"
+        android:name="com.idealorb.indimovies.UI.AiringFragment"
+        android:label="airing_fragment"
+        tools:layout="@layout/airing_fragment"/>
+    <fragment
+        android:id="@+id/showTrackingFragment"
+        android:name="com.idealorb.indimovies.UI.ShowTrackingFragment"
+        android:label="show_tracking_fragment"
+        tools:layout="@layout/show_tracking_fragment" />
+</navigation>
