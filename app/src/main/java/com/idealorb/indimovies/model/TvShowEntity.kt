@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 //import org.parceler.Generated
 //
 //@Generated("com.robohorse.robopojogenerator")
-data class TVShowEntity(
+data class TvShowEntity(
 
 		@field:SerializedName("page")
 	val page: Int? = null,

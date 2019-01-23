@@ -3,34 +3,41 @@ package com.idealorb.indimovies.Repository
 import android.util.Log
 import com.idealorb.indimovies.BuildConfig
 import com.idealorb.indimovies.model.MainModel
-import com.idealorb.indimovies.model.TVShowEntity
 import com.idealorb.indimovies.model.TvShow
+import com.idealorb.indimovies.model.TvShowEntity
 import com.idealorb.indimovies.network.IMoviesdbApi
 import com.idealorb.indimovies.network.MoviesRemoteDataSource
 import kotlinx.coroutines.Deferred
-import kotlin.random.Random
 
 class MovieRepository {
     private val moviesdbApi: IMoviesdbApi = MoviesRemoteDataSource.retrofitInstance
             .create(IMoviesdbApi::class.java)
 
-    fun loadRemoteShows(): Deferred<TVShowEntity> {
-        Log.d(TAG, "loadRemoteShows(): called")
+    fun loadRemotePopularShows(): Deferred<TvShowEntity> {
+        Log.d(TAG, "loadRemotePopularShows(): called")
         return moviesdbApi.getPopularShows(API_KEY, API_LANG, 1)
+    }
+    fun loadRemoteTopRatedShows(): Deferred<TvShowEntity> {
+        Log.d(TAG, "loadRemotePopularShows(): called")
+        return moviesdbApi.getTopRatedShows(API_KEY, API_LANG, 1)
+    }
+    fun loadRemoteTrendingShows(): Deferred<TvShowEntity> {
+        Log.d(TAG, "loadRemotePopularShows(): called")
+        return moviesdbApi.getTrendingShows(TRENDING_MEDIA_TYPE, TRENDING_TIME_WINDOW,
+                API_KEY)
     }
 
     fun loadHeaders(): List<String>{
-        Log.d(TAG, "loadRemoteShows(): called")
-        return arrayListOf("Popular", "Adventure", " Comedy", "Action")
+        Log.d(TAG, "loadRemotePopularShows(): called")
+        return arrayListOf("Trending", "Popular", "Top Rated")
     }
 
-    fun loadMainViewData(tvShows : List<TvShow?>?): List<MainModel>{
-        Log.d(TAG, "loadRemoteShows(): called")
+    fun loadMainViewData(tvShows : List<List<TvShow?>?>): List<MainModel>{
+        Log.d(TAG, "loadRemotePopularShows(): called")
         val mainModels = ArrayList<MainModel>()
         val size = loadHeaders().size
         for (i in 0 until size){
-            val random = Random.nextInt(size.minus(1))
-            mainModels.add(MainModel(loadHeaders()[random], tvShows))
+            mainModels.add(MainModel(loadHeaders()[i], tvShows[i]))
         }
         return mainModels
     }
@@ -38,6 +45,8 @@ class MovieRepository {
     companion object {
         private const val API_KEY = BuildConfig.ApiKey
         private const val API_LANG = "en-US"
+        private const val TRENDING_MEDIA_TYPE = "tv"
+        private const val TRENDING_TIME_WINDOW = "week"
         private val TAG = MovieRepository::class.java.simpleName
     }
 
