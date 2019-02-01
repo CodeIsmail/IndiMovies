@@ -1,4 +1,4 @@
-package com.idealorb.indimovies.network
+package com.idealorb.indimovies.services
 
 import com.idealorb.indimovies.model.TvShowEntity
 import kotlinx.coroutines.Deferred
@@ -6,7 +6,7 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface IMoviesdbApi {
+interface ITvShowsdbApi {
 
     @GET("tv/popular")
     fun getPopularShows(@Query("api_key") api_key: String,

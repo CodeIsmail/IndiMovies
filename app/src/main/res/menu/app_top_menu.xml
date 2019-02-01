@@ -7,7 +7,7 @@
         android:title="@string/tv_show_airing" />
     <item
         android:id="@+id/tvShowDiscoverFragment"
-        android:icon="@drawable/ic_search"
+        android:icon="@drawable/ic_discover"
         android:title="@string/tv_show_discover" />
     <item
         android:id="@+id/showTrackingFragment"

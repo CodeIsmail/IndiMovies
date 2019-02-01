@@ -5,13 +5,12 @@ import com.idealorb.indimovies.BuildConfig
 import com.idealorb.indimovies.model.MainModel
 import com.idealorb.indimovies.model.TvShow
 import com.idealorb.indimovies.model.TvShowEntity
-import com.idealorb.indimovies.network.IMoviesdbApi
-import com.idealorb.indimovies.network.MoviesRemoteDataSource
+import com.idealorb.indimovies.services.ITvShowsdbApi
+import com.idealorb.indimovies.services.MoviesRemoteDataSource
 import kotlinx.coroutines.Deferred
 
 class MovieRepository {
-    private val moviesdbApi: IMoviesdbApi = MoviesRemoteDataSource.retrofitInstance
-            .create(IMoviesdbApi::class.java)
+    private val moviesdbApi: ITvShowsdbApi = MoviesRemoteDataSource.service
 
     fun loadRemotePopularShows(): Deferred<TvShowEntity> {
         Log.d(TAG, "loadRemotePopularShows(): called")

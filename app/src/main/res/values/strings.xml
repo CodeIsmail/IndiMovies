@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">IndiMovies</string>
+    <string name="app_name">tracketv</string>
     <string name="movie_title_label">Incredibles 2</string>
     <string name="rating_count">8.0</string>
     <string name="rating_shape">Rating Shape</string>

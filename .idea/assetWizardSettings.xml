@@ -28,8 +28,9 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="ic_timelapse" />
-                            <entry key="sourceFile" value="C:\Users\IbisAmeer" />
+                            <entry key="assetSourceType" value="FILE" />
+                            <entry key="outputName" value="ic_discover" />
+                            <entry key="sourceFile" value="C:\Users\IbisAmeer\Desktop\Project Design Styles\Nanodegree\IndiMovies App\discover.svg" />
                           </map>
                         </option>
                       </PersistentState>

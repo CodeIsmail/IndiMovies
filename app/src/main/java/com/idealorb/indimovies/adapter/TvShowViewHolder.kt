@@ -12,7 +12,6 @@ class TvShowViewHolder(override val containerView: View) :
         RecyclerView.ViewHolder(containerView), LayoutContainer {
 
     fun bindView(tvShow : TvShow?) {
-        textView.text = tvShow?.name
         Picasso.get()
                 .load(getMovieThumbnailUrl(tvShow!!))
                 .placeholder(R.color.placeHolder)
@@ -20,7 +19,7 @@ class TvShowViewHolder(override val containerView: View) :
     }
 
     private fun getMovieThumbnailUrl(tvShow: TvShow): String {
-        val MOVIE_POSTER_BASEURL = "http://image.tmdb.org/t/p/w342/"
+        val MOVIE_POSTER_BASEURL = "http://image.tmdb.org/t/p/w185/"
         return MOVIE_POSTER_BASEURL + tvShow.posterPath
     }
 }

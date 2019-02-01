@@ -1,12 +1,14 @@
 package com.idealorb.indimovies.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.idealorb.indimovies.R
 import com.idealorb.indimovies.model.MainModel
 
-class MainViewAdapter(private val mainModels: List<MainModel>) : RecyclerView.Adapter<MainViewHolder>() {
+class MainViewAdapter(private var mainModels: List<MainModel>) : RecyclerView.Adapter<MainViewHolder>() {
 
 
     private val viewPool = RecyclerView.RecycledViewPool()
@@ -25,5 +27,11 @@ class MainViewAdapter(private val mainModels: List<MainModel>) : RecyclerView.Ad
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
         val mainModel = mainModels[position]
         holder.bindView(mainModel, viewPool)
+    }
+
+    fun updateMainModelData(newMainModels: List<MainModel>){
+        DiffUtil.calculateDiff(MainViewDiffCallback(newMainModels, mainModels), false).dispatchUpdatesTo(this)
+        mainModels = newMainModels
+        Log.d("MainModelAdapter", "updateMainModelData called")
     }
 }

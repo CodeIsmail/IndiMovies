@@ -3,11 +3,12 @@ package com.idealorb.indimovies.adapter
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.idealorb.indimovies.R
 import com.idealorb.indimovies.model.TvShow
 
-class TvShowAdapter(private val moviesList: List<TvShow?>?) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class TvShowAdapter(private var moviesList: List<TvShow?>?) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     interface OnClickMovieListener {
         fun onClickMovie(tvShow: TvShow)
@@ -27,13 +28,15 @@ class TvShowAdapter(private val moviesList: List<TvShow?>?) : RecyclerView.Adapt
         (holder as TvShowViewHolder).bindView(movieObject)
     }
 
-    fun setTvShowData(tvShows: List<TvShow>){
-//        moviesList?.addAll(tvShows)
+    fun updateTvShowData(tvShows: List<TvShow?>?){
+        DiffUtil.calculateDiff(TvShowDiffCallback(tvShows, moviesList), false).dispatchUpdatesTo(this)
+        moviesList = tvShows
+        Log.d("TvShowAdapter", "updateTvShowData called")
     }
 
     override fun getItemCount(): Int {
         Log.d(TAG, "Tv Show List size: ${moviesList!!.size}")
-        return moviesList.size
+        return moviesList!!.size
     }
 
 

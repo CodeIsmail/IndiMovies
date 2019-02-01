@@ -39,7 +39,12 @@ class TvShowDiscoverFragment : Fragment() {
         viewModel = ViewModelProviders.of(this, tvShowDiscoverViewModelFactory).get(TvShowDiscoverViewModel::class.java)
 
         viewModel.loadMainView().observe(this, Observer<List<MainModel>>{
-            initView(it)
+
+            if (recycler_view.adapter == null){
+                initView(it)
+            }else {
+                (recycler_view.adapter as MainViewAdapter).updateMainModelData(it)
+            }
         })
 
 
