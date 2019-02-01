@@ -4,10 +4,10 @@
     >
 
     <item
-        android:id="@+id/action_favorite"
+        android:id="@+id/action_search"
         android:orderInCategory="1"
-        android:icon="@drawable/ic_favorite_border"
-        android:title="@string/favorite"
+        android:icon="@drawable/ic_search"
+        android:title="@string/search"
         app:showAsAction="ifRoom"/>
 
     <item

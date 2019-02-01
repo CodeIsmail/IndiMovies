@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/tvShowDiscoverFragment"
-        android:name="com.idealorb.indimovies.UI.TvShowDiscoverFragment"
+        android:name="com.idealorb.tracketv.UI.TvShowDiscoverFragment"
         android:label="tv_show_discover_fragment"
         tools:layout="@layout/tv_show_discover_fragment" >
         <action
@@ -19,12 +19,12 @@
     </fragment>
     <fragment
         android:id="@+id/airingFragment"
-        android:name="com.idealorb.indimovies.UI.AiringFragment"
+        android:name="com.idealorb.tracketv.UI.AiringFragment"
         android:label="airing_fragment"
         tools:layout="@layout/airing_fragment"/>
     <fragment
         android:id="@+id/showTrackingFragment"
-        android:name="com.idealorb.indimovies.UI.ShowTrackingFragment"
+        android:name="com.idealorb.tracketv.UI.ShowTrackingFragment"
         android:label="show_tracking_fragment"
         tools:layout="@layout/show_tracking_fragment" />
 </navigation>

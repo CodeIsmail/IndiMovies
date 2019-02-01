@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.idealorb.indimovies">
+    package="com.idealorb.tracketv">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <application
@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:fullBackupContent="@xml/backup_descriptor">
-        <activity android:name=".UI.MainActivity"
+        <activity android:name="com.idealorb.tracketv.UI.MainActivity"
             android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

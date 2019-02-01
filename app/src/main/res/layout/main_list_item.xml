@@ -37,6 +37,6 @@
         app:layout_constraintTop_toBottomOf="@+id/show_category"
         tools:itemCount="3"
         tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/movies_list_item" />
+        tools:listitem="@layout/tv_list_item" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
