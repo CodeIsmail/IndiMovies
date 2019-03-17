@@ -1,27 +1,21 @@
 <resources>
     <string name="app_name">tracketv</string>
-    <string name="movie_title_label">Incredibles 2</string>
-    <string name="rating_count">8.0</string>
-    <string name="rating_shape">Rating Shape</string>
     <string name="movie_thumbnail">Movie Thumbnail</string>
-    <string name="ratings">Ratings</string>
-    <string name="movie_timer">Movie timer</string>
-    <string name="release_date">Release date</string>
-    <string name="press_play">Press play</string>
-    <string name="movie_header">Movie header</string>
     <string name="most_popular_label">Most popular</string>
-    <string name="empty_header_label" />
     <string name="highest_rated_label">Highest rated</string>
     <string name="error_message">Failed to load contents</string>
-    <string name="movie_overview">SYNOPSIS</string>
-    <string name="oval_background">oval_background</string>
-    <string name="reviewer_initials">Reviewer Initials</string>
-    <string name="review_header">Reviews</string>
-    <string name="favorite">Favorite</string>
-    <string name="favorite_label">Favorite</string>
-    <string name="nofavmovies">No favorite movies available</string>
     <string name="tv_show_airing">Airing</string>
     <string name="tv_show_discover">Discover</string>
     <string name="tv_show_tracker">Tracking</string>
     <string name="search">search</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="synopsis_title">Synopsis</string>
+    <string name="seasons_title">Seasons</string>
+    <string name="cast_title">Cast</string>
+    <string name="tv_show_name" />
+    <string name="tv_show_genres" />
+    <string name="similar_shows_title">Similar Shows</string>
+    <string name="start_tracking_btn_label">Start Tracking</string>
 </resources>

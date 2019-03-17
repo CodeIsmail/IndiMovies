@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.Navigation.findNavController
-import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.setupWithNavController
 import com.idealorb.tracketv.R
+import com.idealorb.tracketv.extensions.display
+import com.idealorb.tracketv.extensions.gone
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -17,7 +19,14 @@ class MainActivity : AppCompatActivity(){
         setSupportActionBar(main_toolbar)
 
         val navController = findNavController(this, R.id.nav_host_fragment)
-        NavigationUI.setupWithNavController(bottom_nav, navController)
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if (destination.id == R.id.tvShowFragment){
+                bottom_nav.gone()
+            }else{
+                bottom_nav.display()
+            }
+        }
+        bottom_nav.setupWithNavController(navController)
 
     }
 
