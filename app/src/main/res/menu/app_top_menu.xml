@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item
-        android:id="@+id/airingFragment"
-        android:icon="@drawable/ic_live_tv"
-        android:title="@string/tv_show_airing" />
+    <!--    <item-->
+    <!--        android:id="@+id/airingFragment"-->
+    <!--        android:icon="@drawable/ic_live_tv"-->
+    <!--        android:title="@string/tv_show_airing" />-->
     <item
         android:id="@+id/tvShowDiscoverFragment"
         android:icon="@drawable/ic_discover"
         android:title="@string/tv_show_discover" />
     <item
-        android:id="@+id/showTrackingFragment"
+        android:id="@+id/tvShowTimelineFragment"
         android:icon="@drawable/ic_timelapse"
         android:title="@string/tv_show_tracker" />
 </menu>

@@ -11,8 +11,6 @@ class TvShowDiscoverViewModelFactory private constructor(private val repository:
     companion object {
         private val TAG = TvShowDiscoverViewModelFactory::class.java.simpleName
         fun createFactory(): TvShowDiscoverViewModelFactory {
-//        val context = activity.applicationContext
-//                ?: throw IllegalStateException("Not yet attached to Application")
             Log.d(TAG, "createFactory(): called")
             return TvShowDiscoverViewModelFactory(TvShowRepository())
         }

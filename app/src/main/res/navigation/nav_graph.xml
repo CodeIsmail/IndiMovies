@@ -9,41 +9,16 @@
         android:id="@+id/tvShowDiscoverFragment"
         android:name="com.idealorb.tracketv.UI.TvShowDiscoverFragment"
         android:label="tv_show_discover_fragment"
-        tools:layout="@layout/tv_show_discover_fragment" >
-        <action
-            android:id="@+id/action_tvShowDiscoverFragment_to_airingFragment"
-            app:destination="@id/airingFragment"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim" />
+        tools:layout="@layout/fragment_tvshow_discover">
         <action
             android:id="@+id/action_tvShowDiscoverFragment_to_showTrackingFragment"
-            app:destination="@id/showTrackingFragment"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim" />
-        <action
-            android:id="@+id/action_tvShowDiscoverFragment_to_tvShowFragment"
-            app:destination="@id/tvShowFragment"
+            app:destination="@id/tvShowTimelineFragment"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim" />
     </fragment>
     <fragment
-        android:id="@+id/airingFragment"
-        android:name="com.idealorb.tracketv.UI.AiringFragment"
-        android:label="airing_fragment"
-        tools:layout="@layout/airing_fragment"/>
-    <fragment
-        android:id="@+id/showTrackingFragment"
-        android:name="com.idealorb.tracketv.UI.ShowTrackingFragment"
+        android:id="@+id/tvShowTimelineFragment"
+        android:name="com.idealorb.tracketv.UI.TvShowTimelineFragment"
         android:label="show_tracking_fragment"
-        tools:layout="@layout/show_tracking_fragment" />
-    <fragment
-        android:id="@+id/tvShowFragment"
-        android:name="com.idealorb.tracketv.UI.TvShowFragment"
-        android:label="tv_show_fragment"
-        tools:layout="@layout/tv_show_fragment" >
-        <argument
-            android:name="tvShowId"
-            app:argType="integer"
-            android:defaultValue="0" />
-    </fragment>
+        tools:layout="@layout/fragment_tvshow_timeline" />
 </navigation>

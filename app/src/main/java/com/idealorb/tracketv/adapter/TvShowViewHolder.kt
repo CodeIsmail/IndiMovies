@@ -4,24 +4,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import coil.api.load
 import com.idealorb.tracketv.R
 import com.idealorb.tracketv.model.TvShow
-import com.squareup.picasso.Picasso
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.tv_list_item.*
+import kotlinx.android.synthetic.main.layout_tvshow_list_item.*
 
 class TvShowViewHolder(override val containerView: View) :
         RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-
     fun bindView(tvShow : TvShow?, listener:(view: View, tvShow: TvShow)->Unit) {
-        Picasso.get()
-                .load(getMovieThumbnailUrl(tvShow!!))
-                .placeholder(R.color.placeHolder)
-                .into(tvshow_thumbnail_iv)
+        tvshow_thumbnail_iv.load(getMovieThumbnailUrl(tvShow!!))
         containerView.setOnClickListener {
             listener(it, tvShow)
-
         }
     }
 
@@ -33,7 +28,7 @@ class TvShowViewHolder(override val containerView: View) :
     companion object {
         fun create(parent: ViewGroup): TvShowViewHolder {
             val view = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.tv_list_item, parent, false)
+                    .inflate(R.layout.layout_tvshow_list_item, parent, false)
             return TvShowViewHolder(view)
         }
     }
