@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.idealorb.tracketv.model.TvShow
+import dev.codeismail.domain.model.TvShow
 
 
 class TvShowAdapter(private val listener: (view: View, tvShow: TvShow) -> Unit) :

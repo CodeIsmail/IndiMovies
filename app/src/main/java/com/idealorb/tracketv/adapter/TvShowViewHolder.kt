@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
 import com.idealorb.tracketv.R
-import com.idealorb.tracketv.model.TvShow
+import dev.codeismail.domain.model.TvShow
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.layout_tvshow_list_item.*
 

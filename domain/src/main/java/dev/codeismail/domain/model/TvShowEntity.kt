@@ -1,7 +1,6 @@
-package com.idealorb.tracketv.model
+package dev.codeismail.domain.model
 
 import com.google.gson.annotations.SerializedName
-
 
 data class TvShowEntity(
         @SerializedName("page")

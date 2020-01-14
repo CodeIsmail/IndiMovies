@@ -4,7 +4,7 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL
 import androidx.recyclerview.widget.RecyclerView
-import com.idealorb.tracketv.model.TvShowCategoryEntity
+import dev.codeismail.domain.model.TvShowCategoryEntity
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.layout_tvshow_category_list_item.*
 

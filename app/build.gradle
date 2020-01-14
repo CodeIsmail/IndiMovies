@@ -50,12 +50,10 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     implementation "androidx.fragment:fragment-ktx:1.1.0"
     implementation("io.coil-kt:coil:0.9.1")
-    implementation 'com.squareup.retrofit2:retrofit:2.7.1'
-    implementation 'com.squareup.retrofit2:converter-gson:2.7.1'
     testImplementation 'junit:junit:4.13'
     kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
     testImplementation 'androidx.arch.core:core-testing:2.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-
+    implementation project (':domain')
     implementation project(':data')
 }

@@ -12,8 +12,8 @@ import com.idealorb.tracketv.R
 import com.idealorb.tracketv.adapter.TvShowCategoryAdapter
 import com.idealorb.tracketv.extensions.display
 import com.idealorb.tracketv.extensions.hide
-import com.idealorb.tracketv.model.TvShow
-import com.idealorb.tracketv.model.TvShowCategoryEntity
+import dev.codeismail.domain.model.TvShow
+import dev.codeismail.domain.model.TvShowCategoryEntity
 import kotlinx.android.synthetic.main.fragment_tvshow_discover.*
 
 class TvShowDiscoverFragment : Fragment() {

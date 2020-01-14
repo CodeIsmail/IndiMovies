@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.idealorb.tracketv.R
-import com.idealorb.tracketv.model.TvShowCategoryEntity
+import dev.codeismail.domain.model.TvShowCategoryEntity
 
 class TvShowCategoryAdapter(private var tvShowCategoryEntities: List<TvShowCategoryEntity>) : RecyclerView.Adapter<TvShowCategoryViewHolder>() {
 

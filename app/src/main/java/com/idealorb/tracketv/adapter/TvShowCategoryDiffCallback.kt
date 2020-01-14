@@ -1,7 +1,7 @@
 package com.idealorb.tracketv.adapter
 
 import androidx.recyclerview.widget.DiffUtil
-import com.idealorb.tracketv.model.TvShowCategoryEntity
+import dev.codeismail.domain.model.TvShowCategoryEntity
 
 class TvShowCategoryDiffCallback(private val newTvShowCategoryEntities: List<TvShowCategoryEntity>, private val oldTvShowCategoryEntities: List<TvShowCategoryEntity>) : DiffUtil.Callback() {
 
