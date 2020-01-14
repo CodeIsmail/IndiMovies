@@ -1,4 +1,4 @@
-package com.idealorb.tracketv.UI
+package com.idealorb.tracketv.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater

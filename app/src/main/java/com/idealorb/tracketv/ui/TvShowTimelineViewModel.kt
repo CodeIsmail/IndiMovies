@@ -1,4 +1,4 @@
-package com.idealorb.tracketv.UI
+package com.idealorb.tracketv.ui
 
 import androidx.lifecycle.ViewModel
 

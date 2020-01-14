@@ -1,10 +1,10 @@
-package com.idealorb.tracketv.UI
+package com.idealorb.tracketv.ui
 
 import android.util.Log
 import androidx.annotation.NonNull
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.idealorb.tracketv.repository.TvShowRepository
+import dev.codeismail.data.repository.TvShowRepository
 
 class TvShowDiscoverViewModelFactory private constructor(private val repository: TvShowRepository) : ViewModelProvider.Factory {
 

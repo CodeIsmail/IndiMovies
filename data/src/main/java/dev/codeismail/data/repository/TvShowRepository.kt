@@ -1,6 +1,6 @@
-package com.idealorb.tracketv.repository
+package dev.codeismail.data.repository
 
-import com.idealorb.tracketv.BuildConfig
+import dev.codeismail.data.BuildConfig
 
 class TvShowRepository {
 //    private val apiService: ITvShowApi = TvShowRemoteDataSource.service
