@@ -1,8 +1,10 @@
 package dev.codeismail.data.repository
 
 import dev.codeismail.data.BuildConfig
+import dev.codeismail.data.service.ITvShowApi
+import dev.codeismail.domain.IRepository
 
-class TvShowRepository {
+class TvShowRepository(private val apiService: ITvShowApi) : IRepository {
 //    private val apiService: ITvShowApi = TvShowRemoteDataSource.service
 //    private val PAGE_SIZE = 20
 //    private val config  = PagedList.Config.Builder()
@@ -57,6 +59,10 @@ class TvShowRepository {
         private const val API_LANG = "en-US"
         private const val APPEND_TO_RESPONSE = "Seasons,similar,content_ratings,reviews"
         private val TAG = TvShowRepository::class.java.simpleName
+    }
+
+    override suspend fun loadTvShows() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
 }
