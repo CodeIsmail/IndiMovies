@@ -2,6 +2,10 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
+Properties localProperties = new Properties()
+localProperties.load(project.rootProject.file('local.properties').newDataInputStream())
+def TMDB_API = localProperties.getProperty('apiKey')
+
 android {
     compileSdkVersion 29
 
@@ -17,16 +21,14 @@ android {
 
     }
 
-    def localProperties = new Properties()
-    localProperties.load(new FileInputStream(rootProject.file("local.properties")))
     buildTypes {
         debug {
-            buildConfigField 'String', "API_KEY", localProperties['apiKey']
+            buildConfigField "String", "API_KEY", "$TMDB_API"
         }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField 'String', "API_KEY", localProperties['apiKey']
+            buildConfigField "String", "API_KEY", "$TMDB_API"
         }
     }
 
