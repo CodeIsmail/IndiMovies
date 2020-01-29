@@ -1,68 +1,30 @@
 package dev.codeismail.data.repository
 
-import dev.codeismail.data.BuildConfig
-import dev.codeismail.data.service.ITvShowApi
+import dev.codeismail.data.datasource.RemoteDataSource
+import dev.codeismail.data.mapper.TvTvShowMapper
 import dev.codeismail.domain.IRepository
+import dev.codeismail.domain.common.Result
+import dev.codeismail.domain.model.TvShow
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 
-class TvShowRepository(private val apiService: ITvShowApi) : IRepository {
-//    private val apiService: ITvShowApi = TvShowRemoteDataSource.service
-//    private val PAGE_SIZE = 20
-//    private val config  = PagedList.Config.Builder()
-//            .setEnablePlaceholders(false)
-//            .setPageSize(PAGE_SIZE)
-//            .setInitialLoadSizeHint(PAGE_SIZE * 3)
-//            .setPrefetchDistance(10)
-//            .build()
-//    fun loadRemotePopularShows(): Observable<PagedList<TvShow?>> {
-//        Log.d(TAG, "loadRemotePopularShows(): called")
-//        val sourceFactory = PopularTvShowDataSourceFactory(apiService)
-//        return RxPagedListBuilder(sourceFactory, config).buildObservable()
-//    }
-//
-//    private suspend fun transform(tvShowEntity: Deferred<TvShowEntity>) : List<TvShow?>{
-//        val entity = tvShowEntity.await()
-//        return entity.tvShows ?: emptyList()
-//    }
-//    fun loadRemoteTopRatedShows(): Observable<PagedList<TvShow?>> {
-//        Log.d(TAG, "loadRemoteTopRatedShows(): called")
-//        val sourceFactory = TopRatedTvShowDataSourceFactory(apiService)
-//        return RxPagedListBuilder(sourceFactory, config).buildObservable()
-//    }
-//    fun loadRemoteTrendingShows(): Observable<PagedList<TvShow?>> {
-//        Log.d(TAG, "loadRemoteTrendingShows(): called")
-//        val sourceFactory = TrendingTvShowDataSourceFactory(apiService)
-//        return RxPagedListBuilder(sourceFactory, config).buildObservable()
-//    }
-//
-//    fun loadHeaders(): List<String>{
-//        Log.d(TAG, "loadHeaders(): called")
-//        return arrayListOf("Trending", "Popular", "Top Rated")
-//    }
-//
-//    fun loadMainViewData(tvShows : List<PagedList<TvShow?>>): List<TvShowCategoryEntity>{
-//        Log.d(TAG, "loadMainViewData(): called")
-//        val mainModels = ArrayList<TvShowCategoryEntity>()
-//        val size = loadHeaders().size
-//        if(tvShows.isNotEmpty()){
-//            for (i in 0 until size){
-//                mainModels.add(TvShowCategoryEntity(loadHeaders()[i], tvShows[i]))
-//            }
-//        }
-//        return mainModels
-//    }
+class TvShowRepository(private val remoteDataSource: RemoteDataSource) : IRepository {
 
-    //    suspend fun loadTvShowDetail(id: Int): TvShowDetailEntity {
-//        return apiService.getTvShow(id, API_KEY, API_LANG, APPEND_TO_RESPONSE).await()
-//    }
+    @ExperimentalCoroutinesApi
+    override suspend fun loadTvShows(): Flow<Result<List<TvShow>>> {
+        val popular = TvTvShowMapper(remoteDataSource.loadPopular())
+        return flow {
+            emit(Result.Success(popular))
+        }.catch{e ->
+            Result.Error(e)
+        }.flowOn(Dispatchers.IO)
+    }
+
     companion object {
-        private const val API_KEY = BuildConfig.ApiKey
-        private const val API_LANG = "en-US"
-        private const val APPEND_TO_RESPONSE = "Seasons,similar,content_ratings,reviews"
         private val TAG = TvShowRepository::class.java.simpleName
     }
-
-    override suspend fun loadTvShows() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
 }

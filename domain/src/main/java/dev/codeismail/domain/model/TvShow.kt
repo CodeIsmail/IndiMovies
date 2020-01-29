@@ -1,7 +1,7 @@
 package dev.codeismail.domain.model
 
 data class TvShow(
-        val backdropPath: String,
+        val backdropPath: String?,
         val firstAirDate: String,
         val genreIds: List<Int>,
         val id: Int,
@@ -11,7 +11,7 @@ data class TvShow(
         val originalName: String,
         val overview: String,
         val popularity: Double,
-        val posterPath: String,
+        val posterPath: String?,
         val voteAverage: Double,
         val voteCount: Int
 )

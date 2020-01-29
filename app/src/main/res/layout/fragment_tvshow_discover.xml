@@ -10,11 +10,14 @@
         android:id="@+id/recycler_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/layout_tvshow_category_list_item" />
+        app:spanCount="2"
+        tools:itemCount="100"
+        tools:listitem="@layout/layout_tvshow_list_item" />
 
     <TextView
         android:id="@+id/tv_error_message"
